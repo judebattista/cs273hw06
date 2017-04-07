@@ -40,7 +40,17 @@ public:
 		         (section 6.5 pages. 392-393).
 		         Look at the Passenger_Queue::check_new_arrival() method 
 		*/
-
+		//If the random roll is equal to or less than the arrival rate, we get a new plane
+		double randomDouble = my_random.next_double();
+		bool planeArrives = randomDouble <= arrival_rate;
+		std::cerr << "Random roll: " << randomDouble << ". Arrival rate: " << arrival_rate << ". Plane arrived: " << planeArrives << std::endl;
+		//bool planeArrives = my_random.next_double() <= arrival_rate;
+		if (planeArrives) {
+			//Create a new plane with the current clock value as its arrival time
+			Plane* plane = new Plane(clock);
+			//Add plane to the landing queue
+			the_queue.push(plane);
+		}
 
 	}
 

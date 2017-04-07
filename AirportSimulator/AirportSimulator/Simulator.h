@@ -2,6 +2,7 @@
 #define SIMULATE_H_
 
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <stdexcept>
 #include <limits>
@@ -52,7 +53,8 @@ private:
 	}
 
 public:
-	
+	int totalPlanesServed;
+
 	Simulator() {
 		landing_queue = new LandingQueue();
 		service_queue = new ServiceQueue();
@@ -98,19 +100,24 @@ public:
 			service_queue->update(clock);
 			departure_queue->update(clock);
 		}
+		totalPlanesServed = landing_queue->get_num_served();
 	}
 
 	void show_stats()
 	{
 		std::cout << "Number of planes served in the arrival queue: " << landing_queue->get_num_served() << std::endl;
-		std::cout << "Total wait time for all planes in arrival queue: " << landing_queue->get_total_wait() << std::endl;
+		std::cout << "Total wait time for all planes in arrival queue: " << landing_queue->get_total_wait() << " minutes." << std::endl;
 		// FIXME: Calculate and display the average wait time for the landing queue
+		std::cout << "Average wait time for a plane in the arrival queue: " << std::fixed << std::setprecision(2) 
+			<< landing_queue->get_total_wait() / landing_queue->get_num_served() << " minutes." << std::endl;
 		
 
 		std::cout << std::endl;
 		std::cout << "Number of planes served in the departure queue: " << departure_queue->get_num_served() << std::endl;
-		std::cout << "Total wait time for all planes in departure queue: " << departure_queue->get_total_wait() << std::endl;
+		std::cout << "Total wait time for all planes in departure queue: " << departure_queue->get_total_wait() << " minutes." << std::endl;
 		// FIXME: Calculate and display the average wait time for the departure queue
+		std::cout << "Average wait time for a plane in the departure queue: " << std::fixed << std::setprecision(2)
+			<< departure_queue->get_total_wait() / departure_queue->get_num_served() << " minutes." << std::endl;
 		
 		std::cout << std::endl;
 

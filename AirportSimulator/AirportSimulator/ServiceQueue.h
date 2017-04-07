@@ -43,13 +43,12 @@ public:
 			Plane *plane = the_queue.front();
 
 			// check if a plane is ready to move from the service queue to the departure queue
-			if ((clock - plane->start_service_time) > plane->service_time) {  
+			if (clock > plane->start_service_time + plane->service_time ) {  
 				// FIXME: remove plane from the service queue
-				
+				the_queue.pop();
 
 				// FIXME: update the enter_departure_time attribute for the plane
-				
-
+				plane->enter_departure_time = clock;
 				departure_queue->the_queue.push(plane);
 			}
 		}
@@ -64,22 +63,28 @@ public:
 				landing_queue->the_queue.pop();
 
 				// FIXME: calculate the wait time of the plane in the landing queue
-				
+				plane->start_service_time = clock;
 
 				// FIXME: update total_wait and num_served for the landing queue
-				
-
+				//The time the plane spent in the landing queue is the current clock minus the plane's arrival time
+				int timeInLandingQueue = clock - plane->arrival_time;
+				landing_queue->total_wait += timeInLandingQueue;
+				landing_queue->num_served++;
 
 				// FIXME: update the start_service_time attribute for the plane
-				
+				//The plane starts its service time at the current clock value
+				plane->start_service_time = clock;
 
 				/* FIXME: compute a random service time for the plane between min_service_time and max_service_time
 				   HINT: You can use my_random.next_int(n) to get a random value between 0 and n.  This will help
 				         you determine a random number within the range of service times.
 				*/
-				
+				int serviceIntervalLength = max_service_time - min_service_time;
+				int randomServiceDuration = min_service_time + my_random.next_int(serviceIntervalLength);
+				plane->service_time = randomServiceDuration;
 
 				// FIXME: add the plane to the service queue
+				the_queue.push(plane);
 				
 			}
 		}
